@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plagiarism Checker</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Plagiarism Checker</h1>
+    <form id="plagiarismForm" enctype="multipart/form-data">
+      <label for="file1">Choose the first file:</label>
+      <input type="file" name="files" id="file1" accept=".txt,.docx" required />
+      
+      <label for="file2">Choose the second file:</label>
+      <input type="file" name="files" id="file2" accept=".txt,.docx" required />
+      
+      <button type="submit">Check for Plagiarism</button>
+    </form>
+    
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("plagiarismForm");
+    const resultDiv = document.getElementById("result");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+
+      const response = await fetch("/check", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+      resultDiv.innerHTML = `
+        <p><strong>Similarity:</strong> ${result.similarity}</p>
+        <p><strong>Status:</strong> ${result.status}</p>
+      `;
+    });
+  </script>
+</body>
+</html>
